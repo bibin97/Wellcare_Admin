@@ -3,7 +3,7 @@ import { assets } from '../assets/assets'
 import { AdminContext } from '../context/AdmimContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-
+import { DoctorContext } from '../context/DoctorContext'
 const Login = () => {
 
     const [state, setState] = useState('Admin')
@@ -11,7 +11,7 @@ const Login = () => {
     const [password, setPassword] = useState('')
 
     const { setAToken, backendUrl } = useContext(AdminContext)
-
+    const { setDToken } = useContext(DoctorContext)
     const onSubmithandler = async (event) => {
         event.preventDefault()
 
@@ -27,6 +27,14 @@ const Login = () => {
 
             } else {
 
+                const { data } = await axios.post(backendUrl + 'api/doctor/login', { email, password })
+                if (data.success) {
+                    localStorage.setItem('dToken', data.token)
+                    setDToken(data.token)
+                } else {
+                    toast.error(data.message)
+                }
+
             }
         } catch (err) {
 
@@ -37,7 +45,7 @@ const Login = () => {
     }
 
     return (
-        <form onSubmit={onSubmithandler} className='min-h-[80vh] flex items-center'> 
+        <form onSubmit={onSubmithandler} className='min-h-[80vh] flex items-center'>
             <div className='flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-gray-800 text-sm shadow-lg'>
                 <p className='text-2xl font-semibold m-auto'><span className='text-blue-500'> {state} </span>Login</p>
                 <div className='w-full'>
