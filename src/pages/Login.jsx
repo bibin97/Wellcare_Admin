@@ -12,6 +12,8 @@ const Login = () => {
 
     const { setAToken, backendUrl } = useContext(AdminContext)
     const { setDToken } = useContext(DoctorContext)
+
+
     const onSubmithandler = async (event) => {
         event.preventDefault()
 
@@ -36,11 +38,11 @@ const Login = () => {
                 }
 
             }
-        } catch (err) {
-
+        } catch (error) {
+            console.log(error)
+            toast.error('Something went wrong')
         }
-        console.log(err)
-        toast.error('Something went wrong')
+       
 
     }
 
